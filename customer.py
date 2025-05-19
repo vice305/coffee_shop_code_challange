@@ -18,5 +18,9 @@ class Cutomer:
 
     def orders(self):
         return [order for order in Order.all_orders if order.customer == self]
+    
+    def coffees(self):
+        return list(set(coffee for order in self.orders() for coffee in order.coffees))
+    
         
         
