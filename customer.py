@@ -22,5 +22,20 @@ class Cutomer:
     def coffees(self):
         return list(set(coffee for order in self.orders() for coffee in order.coffees))
     
-        
-        
+    def  create_order(self, coffees, price):
+        return Order(self, coffees, price)
+    
+    @classmethod
+    def all_customers(cls,coffees):
+        if not isinstance(coffees, Coffee):
+            raise TypeError("coffees must be a Coffee instance")
+        customer_spending = {}
+        for order in coffee.orders():
+            if order.customer in customer_spending:
+                customer_spending[order.customer] += order.price
+            else:
+                customer_spending[order.customer] = order.price
+            if not customer_spending:
+                return None
+        return max(customer_spending, key=customer_spending.get)
+
