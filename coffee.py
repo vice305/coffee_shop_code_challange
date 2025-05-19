@@ -1,10 +1,26 @@
 class Coffee:
-    def __init__(self, name: str, price: float):
-        self.name = name
-        self.price = price
+    def __init__(self, name):
+        if not isinstance(name, str):
+            raise ValueError("Name must be a string")
+        if len(name) < 3:
+            raise ValueError("Name must be at least 3 characters")
+        self._name = name
 
-    def __str__(self):
-        return f"{self.name} - ${self.price:.2f}"
+    @property
+    def name(self):
+        return self._name
 
-    def __repr__(self):
-        return (f"Coffee(name={self.name}, price={self.price})")
+    def orders(self):
+        return [order for order in Order.all_orders if order.coffee == self]
+
+    def customers(self):
+        return list(set(order.customer for order in self.orders()))
+
+    def num_orders(self):
+        return len(self.orders())
+
+    def average_price(self):
+        orders = self.orders()
+        if not orders:
+            return 0
+        return sum(order.price for order in orders) / len(orders)
