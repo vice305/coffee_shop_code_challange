@@ -1,44 +1,42 @@
-class Cutomer:
-    
+class Customer:
     def __init__(self, name):
         if not isinstance(name, str):
-            raise TypeError("name must be a string")
-        if not name:
-            raise ValueError("name cannot be empty")
-        self.name = name
-        Coffee.all_coffees.append(self)
+            raise ValueError("Name must be a string")
+        if not 1 <= len(name) <= 15:
+            raise ValueError("Name must be between 1 and 15 characters")
+        self._name = name
 
     @property
     def name(self):
-        return self.__name
+        return self._name
+
     @name.setter
     def name(self, value):
         if not isinstance(value, str):
-            raise TypeError("name must be a string")
-        if not value:
-            raise ValueError("name cannot be empty")
-        self.__name = value
+            raise ValueError("Name must be a string")
+        if not 1 <= len(value) <= 15:
+            raise ValueError("Name must be between 1 and 15 characters")
+        self._name = value
 
     def orders(self):
         return [order for order in Order.all_orders if order.customer == self]
-    
+
     def coffees(self):
-        return list(set(coffee for order in self.orders() for coffee in order.coffees))
-    
-    def  create_order(self, coffees, price):
-        return Order(self, coffees, price)
-    
+        return list(set(order.coffee for order in self.orders()))
+
+    def create_order(self, coffee, price):
+        return Order(self, coffee, price)
+
     @classmethod
-    def all_customers(cls,coffees):
-        if not isinstance(coffees, Coffee):
-            raise TypeError("coffees must be a Coffee instance")
+    def most_aficionado(cls, coffee):
+        if not isinstance(coffee, Coffee):
+            raise ValueError("Must provide a Coffee instance")
         customer_spending = {}
         for order in coffee.orders():
             if order.customer in customer_spending:
                 customer_spending[order.customer] += order.price
             else:
                 customer_spending[order.customer] = order.price
-            if not customer_spending:
-                return None
+        if not customer_spending:
+            return None
         return max(customer_spending, key=customer_spending.get)
-
