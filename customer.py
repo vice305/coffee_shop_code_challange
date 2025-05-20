@@ -1,6 +1,3 @@
-from order import Order
-from coffee import Coffee
-
 class Customer:
     def __init__(self, name):
         if not isinstance(name, str):
